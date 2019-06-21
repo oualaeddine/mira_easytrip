@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="lib/onsen/css/onsenui.css"/>
+  <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css"/>
+  
+  <script src="lib/onsen/js/onsenui.min.js"></script>
+  <script src="lib/js/app.js"></script>
+  <script   src="https://code.jquery.com/jquery-3.4.1.min.js"   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="   crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <ons-navigator id="appNavigator" swipeable swipe-target-width="80px">
+    <ons-page>
+      <ons-splitter id="appSplitter">
+        <ons-splitter-side id="sidemenu" page="sidemenu.html" swipeable side="right" collapse="" width="260px"></ons-splitter-side>
+        <ons-splitter-content page="tabbar.html"></ons-splitter-content>
+      </ons-splitter>
+    </ons-page>
+  </ons-navigator>
+
+
+  <template id="tabbar.html">
+    <ons-page id="tabbar-page">
+      <ons-toolbar>
+        <div class="center">Acceuil</div>
+        <div class="right">
+          <ons-toolbar-button onclick="fn.toggleMenu()">
+            <ons-icon style="color: red;" icon="ion-navicon, material:md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+      <ons-tabbar swipeable id="appTabbar" position="auto">
+        <ons-tab label="Acceuil" icon="ion-home" page="home.html" active></ons-tab>
+        <ons-tab label="Consultation" icon="fa-car" page="forms.html"></ons-tab>
+        <ons-tab label="A propos" icon="fa-file" page="animations.html"></ons-tab>
+      </ons-tabbar>
+
+      <script>
+        ons.getScriptPage().addEventListener('prechange', function(event) {
+          if (event.target.matches('#appTabbar')) {
+            event.currentTarget.querySelector('ons-toolbar .center').innerHTML = event.tabItem.getAttribute('label');
+          }
+        });
+      </script>
+    </ons-page>
+  </template>
+
+
+  <template id="sidemenu.html">
+    <ons-page>
+      <div class="profile-pic"><img src="lib/img/logo.png"></div>
+
+      <ons-list-title>Accès</ons-list-title>
+      <ons-list>
+        <ons-list-item onclick="fn.loadView(0)">
+          <div class="left"><ons-icon fixed-width class="list-item__icon" style="color: red;" icon="ion-home"></ons-icon></div>
+          <div class="center">Acceuil</div>
+          <div class="right"><ons-icon icon="fa-link"></ons-icon></div>
+        </ons-list-item>
+
+        <ons-list-item onclick="fn.loadView(1)">
+          <div class="left"><ons-icon fixed-width class="list-item__icon" style="color: red;" icon="fa-car"></ons-icon></div>
+          <div class="center">Consultation</div>
+          <div class="right">=<ons-icon icon="fa-link"></ons-icon></div>
+        </ons-list-item>
+
+        <ons-list-item onclick="fn.loadView(2)">
+          <div class="left"><ons-icon fixed-width class="list-item__icon" style="color: red;" icon="fa-file"></ons-icon></div>
+          <div class="center">A propos</div>
+          <div class="right"><ons-icon icon="fa-link"></ons-icon></div>
+        </ons-list-item>
+      </ons-list>
+
+      <script>
+        ons.getScriptPage().onInit = function() {
+          // Set ons-splitter-side animation
+          this.parentElement.setAttribute('animation', ons.platform.isAndroid() ? 'overlay' : 'reveal');
+        };
+      </script>
+
+      <style>
+        .profile-pic {
+          width: 200px;
+          background-color: #fff;
+          margin: 20px auto 10px;
+          border: 1px solid #999;
+          border-radius: 4px;
+        }
+        .profile-pic > img {
+          display: block;
+          max-width: 100%;
+        }
+        ons-list-item {
+          color: #444;
+        }
+      </style>
+
+    </ons-page>
+  </template>
+
+<!--La page d'acceuil -->
+  <template id="home.html">
+    <ons-page>
+      <p class="intro">BIENVENUE sur l'application EASY TRIP<br><br>
+        <ons-list-header>
+          EASY TRIP est l'application qui offre a ses clients  la possibilité de consulter l'état des voies et la couleur des feux du carrefour  en temps réel pour éviter les grands embouteillages et  facilter    la circulation
+        </ons-list-header> 
+      </p>
+
+
+      <style>
+        .intro {
+          text-align: center;
+          padding: 0 20px;
+          margin-top: 40px;
+        }
+
+        ons-card {
+          cursor: pointer;
+          color: #333;
+        }
+
+        .card__title,
+        .card--material__title {
+          font-size: 20px;
+        }
+      </style>
+
+    </ons-page>
+  </template>
+
+<!--La page de consultation -->
+  <template id="forms.html">
+    <ons-page id="forms-page">
+    </br>
+      <ons-list></br>
+
+        <ons-list-header>Entrez le numéro de carrefour</ons-list-header>
+
+        <script type="text/javascript">
+          $(document).ready(function(){      
+            $('#consulter').click(function(event){
+              var numc = $('#username').val();
+              if(numc===""){
+                ons.notification.alert('Vous devez entrer le numéro de carrefour!');
+              }else{
+                event.preventDefault();    
+                $.ajax({
+                  url:"cons.php",
+                  method:"POST",
+                  data:{numc_send:numc},
+                  dataType:"TEXT",
+                  success:function(Result){
+                    $('#result').html(Result)
+                  }
+                })
+              }
+            })
+          })
+        </script>
+
+
+        <form name="cons" method="post">
+          <div style="text-align: center; margin-top: 30px">
+            <p><ons-input id="username" modifier="underbar" placeholder="Numéro de carrefour" float ng-model="page.username" name="numc" ></ons-input></p>   
+            <p style="margin-top: 30px;"><ons-button type="button" id="consulter" name="consulter">Consulter</ons-button></p>
+            <p class="intro"><div id="result"> </div></p>
+          </div>
+        </form>
+      </ons-list>
+      <br>
+
+      <style>
+        .right-icon {
+          margin-left: 10px;
+        }
+        .right-label {
+          color: #666;
+        }
+      </style>
+
+      <ons-list>
+        <p class="intro">
+          La liste des carrefours
+          <ons-list-header> 
+            <table cellpadding="1" cellspacing="20" border="0">
+              <tr><th>Numéro de carrefour<th>Localisation</tr>
+              <tbody id="data"></tbody>
+            </table>
+          </ons-list-header> 
+
+          <script>
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET","data.php", true);
+            ajax.send();
+
+            ajax.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                  var data = JSON.parse(this.responseText);
+                  console.log(data);
+
+                  var html = "";
+                  for(var a = 0; a < data.length; a++) {
+                    html += "<tr>";
+                      html += "<td>" + data[a].id+ "</td>";
+                      html += "<td>" + data[a].localisation + "</td>";
+                    html += "</tr>";
+                  }
+                  document.getElementById("data").innerHTML += html;
+              }
+            };
+          </script>
+        </p>
+      </ons-list>
+    </ons-page>
+  </template>
+
+<!--La page a propos de -->
+  <template id="animations.html">
+    <ons-page>
+      <p class="intro">
+        EASY TRIP<br><br>
+        <ons-list-header> 
+          L'application EASY TRIP permet de consulter l'état des carrefours de la ville, pour l'utiliser il fuat d'abord entrer le numéro de carrefour voulu et valider la demander, une page contenant la densitée de traffic et et la couleur des feux s’affiche.
+        </ons-list-header> 
+      </p>
+    </ons-page>
+  </template>
+
+  <style>
+    ons-splitter-side[animation=overlay] {
+      border-left: 1px solid #bbb;
+    }
+  </style>
+
+
+  </body>
+</html>
