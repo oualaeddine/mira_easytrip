@@ -1,5 +1,5 @@
 <?php
-	$conn = mysqli_connect("localhost", "root", "", "easytrip");
+	$conn = mysqli_connect("mira.cirnfgihqidi.eu-west-3.rds.amazonaws.com", "mira", "miramira", "mira");
 
 	$sql ="SELECT * FROM `data` WHERE `id_carrefour`='".$_POST['numc_send']."'";
 	$result = mysqli_query($conn, $sql);

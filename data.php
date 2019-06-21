@@ -1,5 +1,5 @@
 <?php
-	$conn = mysqli_connect("localhost", "root", "", "easytrip");
+	$conn = mysqli_connect("mira.cirnfgihqidi.eu-west-3.rds.amazonaws.com", "mira", "miramira", "mira");
 	$result = mysqli_query($conn, "SELECT * FROM carrefour");
 
 	$data = array();
