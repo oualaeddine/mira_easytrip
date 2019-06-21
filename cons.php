@@ -1,8 +1,8 @@
 <?php
 	$conn = mysqli_connect("mira.cirnfgihqidi.eu-west-3.rds.amazonaws.com", "mira", "miramira", "mira");
 
-	$sql ="SELECT * FROM `data` WHERE `id_carrefour`='".$_POST['numc_send']."'";
-	$result = mysqli_query($conn, $sql);
+	$sql ="SELECT * FROM data WHERE `id_carrefour`='".$_POST['numc_send']."' ORDER BY id DESC LIMIT 1";
+		$result = mysqli_query($conn, $sql);
 
 	if(mysqli_num_rows($result) > 0){
 		echo ("<img src='lib/img/consultation.jpg'>");
